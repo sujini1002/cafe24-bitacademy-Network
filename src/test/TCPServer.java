@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class TCPServer {
 
@@ -21,11 +22,11 @@ public class TCPServer {
 //			String localhost = inetAddress.getHostAddress();
 //			serverSocket.bind(new InetSocketAddress(localhost,5000));
 //			serverSocket.bind(new InetSocketAddress(inetAddress, 5000));
-			serverSocket.bind(new InetSocketAddress("0.0.0.0", 4000));
+			serverSocket.bind(new InetSocketAddress("0.0.0.0", 6000));
 			
 			
 			//3. accept : 클라이언트의 연결요청을 기다린다.
-			Socket socket = serverSocket.accept(); // 블라킹 (Blocking)
+			Socket socket = serverSocket.accept(); // 블라킹 (Blocking) -connect가 들어오면 연결
 			
 			//다운캐스팅을 명시적으로 표현
 			//getRemoteScoketAddress():원격지의 인터넷 주소와 포트번호를 알려주는 메서드
@@ -34,7 +35,7 @@ public class TCPServer {
 			String remoteHostAddress = inetRemoteSocketAddress.getAddress().getHostAddress();
 			int remotePort = inetRemoteSocketAddress.getPort();
 			
-			
+			//로그남기기
 			System.out.println("[server] conneted by client["+ remoteHostAddress + "," + remotePort + "]");
 			
 			try {
@@ -62,6 +63,9 @@ public class TCPServer {
 				os.write(data.getBytes("utf-8"));
 				
 			}
+			}catch(SocketException e) {
+				//갑자기 끊어진 오류
+				System.out.println("[server] sudden closed by client");
 			}catch(IOException e) {
 				e.printStackTrace();
 			}finally {
@@ -83,6 +87,6 @@ public class TCPServer {
 			}
 		}
 		
-	}
+	}//end main
 
 }

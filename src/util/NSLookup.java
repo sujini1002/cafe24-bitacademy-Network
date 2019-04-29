@@ -25,7 +25,8 @@ public class NSLookup {
 				//키보드에서 입력한 내용을 hostname에 저장
 				String hostname = null;
 				if((hostname=br.readLine())!=null) {
-					if(hostname.equals("exit"))
+					if(hostname.equals("exit"))//hostname이 null일 때  nullPointException이 발생한다.  
+						// "exit".equals(hostname) 는 hostname이 null일 때 nullPointException이 발생하지 않는다
 						break;
 					
 					InetAddress[] inetAddresses = InetAddress.getAllByName(hostname);
