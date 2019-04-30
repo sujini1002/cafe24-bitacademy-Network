@@ -20,15 +20,14 @@ public class EchoClient {
 			
 			//1. 스캐너 생성(표준입력 연결)
 			scanner = new Scanner(System.in);
-			//1. 소켓 생성
+			//2. 소켓 생성
 			socket = new Socket();
 			
-			//2. 서버 연결
+			//3. 서버 연결
 			socket.connect(new InetSocketAddress(SERVER_IP,SERVER_PORT));
 			log("conneted");
 			
-			//3. IOStream 받아오기
-			//4. IOStream 받아오기 
+			//4. IOStream 받아오기
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(),"utf-8"));
 			//개행이 나타날때 마다 autoflush 한다.
 			PrintWriter pr = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"),true);

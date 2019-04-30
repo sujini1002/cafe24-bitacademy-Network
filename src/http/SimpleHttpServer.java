@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SimpleHttpServer {
-	private static final int PORT = 8088;
+	private static final int PORT = 8008;
 
 	public static void main(String[] args) {
 
@@ -18,7 +18,6 @@ public class SimpleHttpServer {
 			serverSocket = new ServerSocket();
 			   
 			// 2. Bind
-			
 			serverSocket.bind( new InetSocketAddress( "0.0.0.0", PORT ) );
 			consoleLog("httpd starts at : "+ PORT);
 			

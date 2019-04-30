@@ -16,13 +16,16 @@ public class TCPServer {
 		try {
 			//1. 서버소켓 생성
 			serverSocket = new ServerSocket();
+			//1-1. Time-wait 시간에 소캣에 포트번호 할당하는 가능하게 하기 위해서
+			serverSocket.setReuseAddress(true);
+			
 			//2. 바인딩(binding)
 			// :Socket에 SocketAddress(IPAddress + Port)를 바인딩한다.
-			InetAddress inetAddress = InetAddress.getLocalHost();
+//			InetAddress inetAddress = InetAddress.getLocalHost();
 //			String localhost = inetAddress.getHostAddress();
 //			serverSocket.bind(new InetSocketAddress(localhost,5000));
 //			serverSocket.bind(new InetSocketAddress(inetAddress, 5000));
-			serverSocket.bind(new InetSocketAddress("0.0.0.0", 6000));
+			serverSocket.bind(new InetSocketAddress("0.0.0.0", 7000));
 			
 			
 			//3. accept : 클라이언트의 연결요청을 기다린다.
@@ -60,6 +63,12 @@ public class TCPServer {
 				System.out.println("[server] received:"+ data);
 				
 				//6.데이터 쓰기
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				os.write(data.getBytes("utf-8"));
 				
 			}
