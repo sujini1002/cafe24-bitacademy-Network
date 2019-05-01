@@ -9,10 +9,24 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 public class RequestHandler extends Thread {
-	private static final String DOCUMENT_ROOT = "./webapp";
+	private static String documentRoot = "./webapp";
+	
+	static {
+		try {
+			//클래스가 실행될 때 실행
+			//jar파일의 webapp 경로
+			documentRoot = new File(RequestHandler.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+			documentRoot += "/webapp";
+			System.out.println("------>"+documentRoot);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private Socket socket;
 	
 	public RequestHandler( Socket socket ) {
@@ -59,11 +73,6 @@ public class RequestHandler extends Thread {
 				//POST(INSERT),DELETE(DELETE),PUT(UPDATE),HEAD(헤드정보조회),CONNECT
 				//위와 같은 HTTP Method는 무시한다.
 				
-				//응답예시
-				//HTTP/1.1 400 Bad Request\r\n
-				//Content-Type:Text/html; charset=utf-8\r\n
-				//\r\n
-				//HTML 에러 문서 (./webapp/error/400.html)
 				response400Error(os);
 			}
 			
@@ -97,7 +106,7 @@ public class RequestHandler extends Thread {
 			url = "/index.html";
 		}
 		
-		File file = new File(DOCUMENT_ROOT+url);
+		File file = new File(documentRoot+url);
 		if(file.exists()==false) {
 			response404Error(os,protocol);
 			return ;
@@ -114,7 +123,7 @@ public class RequestHandler extends Thread {
 
 	
 	public void response404Error(OutputStream os, String protocol) throws UnsupportedEncodingException, IOException {
-		File file1 = new File(DOCUMENT_ROOT+"/error/404.html");
+		File file1 = new File(documentRoot+"/error/404.html");
 		String contentType = Files.probeContentType(file1.toPath());
 		os.write("HTTP/1.1 404 File Not Found\r\n".getBytes("UTF-8"));
 		os.write(("Content-Type:"+contentType+"; charset=utf-8\r\n").getBytes("UTF-8"));// 여기까지가 Header이다.
@@ -125,7 +134,7 @@ public class RequestHandler extends Thread {
 		
 	}
 	public void response400Error(OutputStream os) throws IOException {
-		File file = new File(DOCUMENT_ROOT+"/error/400.html");
+		File file = new File(documentRoot+"/error/400.html");
 		String contentType = Files.probeContentType(file.toPath());
 		//응답
 		os.write("HTTP/1.1 400 Bad Request\r\n".getBytes("UTF-8"));

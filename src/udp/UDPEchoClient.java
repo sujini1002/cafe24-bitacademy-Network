@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class UDPEchoClient {
 	public static final String SERVER_IP = "192.168.1.26";
-	public static final int PORT = 8008;
 	
 	public static void main(String[] args) {
 		Scanner scanner = null;
@@ -22,18 +21,24 @@ public class UDPEchoClient {
 			
 			
 			while(true) {
-				//3.데이터 쓰기
+				//3.키보드 입력 받기
+				System.out.print(">>");
 				String line = scanner.nextLine();
+				//정상종료
+				if("quit".equals(line))break;
+				
+				//4.데이터 쓰기(송신)
 				byte[] sendData = line.getBytes("utf-8");
 				DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,new InetSocketAddress(SERVER_IP, UDPEchoServer.PORT));
 				socket.send(sendPacket);
-				//2. 데이터 읽기
+				
+				//5. 데이터 읽기 (수신)
 				DatagramPacket receivePacket = new DatagramPacket(new byte[UDPEchoServer.BUFFER_SIZE], UDPEchoServer.BUFFER_SIZE);
 				socket.receive(receivePacket);
 				
 				String message = new String(receivePacket.getData(),0,receivePacket.getLength(),"utf-8");
 				
-				//5.콘솔출력
+				//6.콘솔출력
 				System.out.println("<<"+message);
 			}
 			

@@ -23,7 +23,7 @@ public class UDPEchoServer {
 			while(true) {
 				//2. 데이터 수신
 				DatagramPacket receivePacket = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-				socket.receive(receivePacket);
+				socket.receive(receivePacket);//블로킹
 				
 				byte[] data = receivePacket.getData();
 				int length = receivePacket.getLength();
