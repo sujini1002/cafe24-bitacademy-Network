@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
@@ -16,15 +17,14 @@ public class RequestHandler extends Thread {
 	private static String documentRoot = "./webapp";
 	
 	static {
-		try {
+	
 			//클래스가 실행될 때 실행
 			//jar파일의 webapp 경로
-			documentRoot = new File(RequestHandler.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
-			documentRoot += "/webapp";
-			System.out.println("------>"+documentRoot);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+			//documentRoot = new File(RequestHandler.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+			//documentRoot += "/webapp";
+			//간단한 url
+			documentRoot = RequestHandler.class.getClass().getResource("/webapp").getPath();
+			//InputStream is = getClass().getResourceAsStream(name)
 	}
 	
 	private Socket socket;
